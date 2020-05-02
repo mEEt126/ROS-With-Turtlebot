@@ -14,6 +14,7 @@ class maze_solving():
         	self.laser_msg = LaserScan()
 		self.rate = rospy.Rate(10)
 		self.destination_flag = 0
+		self.node_type = "left"
 
 	def laser_callback(self, msg):
         	self.laser_msg = msg
@@ -54,8 +55,27 @@ class maze_solving():
 		rospy.loginfo("straight:" + str(straight))
 		rospy.loginfo("right:" + str(right))
 		time.sleep(1)
+		if left > right:
+			self.turn('left')
+		else:
+			self.turn('right')
 
-		
+	def turn(self, self.node_type):
+		self.cmd.linear.x = 0
+		self.cmd.linear.y = 0
+		self.cmd.linear.z = 0
+		self.cmd.angular.x = 0
+		self.cmd.angular.y = 0
+		if node_type == "left":
+            		self.cmd.angular.z = -0.5
+        	else:
+            		self.cmd.angular.z = 0.5
+		i = 0
+		while(i<=7)
+			self.vel_publisher.publish(self.cmd)
+			rospy.loginfo("turing")
+			i = i + 1
+		self.stop_turtlebot()
 
 	def main(self):
 		while(self.destination_flag != 1):
