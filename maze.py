@@ -7,14 +7,13 @@ import time
 
 class maze_solving():
 	def __init__(self):
-		rospy.init_node('maze solving node using left hand algorithm')
+		rospy.init_node('mazesolvingnode')
 		self.vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size = 5 )
 		self.laser_subscriber = rospy.Subscriber('/kobuki/laser/scan', LaserScan, self.laser_callback)
 		self.cmd = Twist()
         	self.laser_msg = LaserScan()
 		self.rate = rospy.Rate(10)
 		self.destination_flag = 0
-		self.node_type = "left"
 
 	def laser_callback(self, msg):
         	self.laser_msg = msg
@@ -60,7 +59,7 @@ class maze_solving():
 		else:
 			self.turn('right')
 
-	def turn(self, self.node_type):
+	def turn(self, node_type):
 		self.cmd.linear.x = 0
 		self.cmd.linear.y = 0
 		self.cmd.linear.z = 0
@@ -70,21 +69,21 @@ class maze_solving():
             		self.cmd.angular.z = -0.5
         	else:
             		self.cmd.angular.z = 0.5
-		i = 0
-		while(i<=7)
-			self.vel_publisher.publish(self.cmd)
-			rospy.loginfo("turing")
-			i = i + 1
+		self.vel_publisher.publish(self.cmd)
+		time.sleep(3)
+		rospy.loginfo("turing")			
 		self.stop_turtlebot()
 
 	def main(self):
 		while(self.destination_flag != 1):
 			present_reading = self.get_laser(360)
 			rospy.loginfo(present_reading)
-			if (present_reading <= 1):
-				self.node_detected()
-			elif (present_reading == 'inf'):
+			if (present_reading == 'inf'):
 				self.destination()
+				self.stop_turtlebot()
+				time.sleep(5)
+			elif (present_reading <= 1):
+				self.node_detected()
 			else :
 				self.go_straight()
 		
